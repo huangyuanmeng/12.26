@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+            *{
+                margin: 0;padding: 0;list-style: none
+            }
+            #box{
+                width: 100%;
+                height: 100%;
+                background: rgba(146, 53, 123, 0.4);
+                position: fixed;
+                top:0;
+                left: 0;
+            }
+            #mark{
+                width: 200px;
+                height: 200px;
+                background: pink;
+                position: absolute;
+                top:30%;
+                left: 40%;
+                text-align: center;
+                line-height:61px;
+            }
+        </style>
+</head>
+<body>
+    <button id='btn'>点击</button>
+    <script>
+        function Popup(obj){
+            this.obj=obj
+            this.btn=document.getElementById(this.obj.btn)
+            this.onclick()
+        }
+        Popup.prototype={
+            constructor:Popup,
+            onclick:function(){
+                var that = this
+                    this.btn.onclick=function(){
+                        //创建
+                        that.box=document.createElement('div');
+                            that.box.id='box'
+                            //追加
+                            document.body.appendChild(that.box)
+                        that.mark=document.createElement('div')
+                            that.mark.id='mark'
+                            that.box.appendChild(that.mark)
+                        that.str=`<h4>${that.obj.title}</h4><p>${that.obj.content}</p><span>${that.obj.buttons[0]}</span><span>${that.obj.buttons[1]}</span>`
+                        that.mark.innerHTML=that.str;
+
+                        var spans = that.mark.getElementsByTagName('span');
+                        spans[0].onclick=that.obj.successCallback;
+                        spans[1].onclick=that.obj.cancelCallback;                        
+                    }
+            },
+        }
+        new Popup({
+            btn:'btn',
+            title:"购物车",
+            content:"您确定要删除吗？",
+            buttons:['删除',"取消"],
+            //成功回调
+            successCallback:function(){
+                document.body.removeChild(box)
+            },
+            //失败回调
+            cancelCallback:function(){
+                box.style.display='none'
+            }
+        })
+    </script>
+</body>
+</html>
